@@ -9,18 +9,18 @@ public class CajaDeAhorro {
     private ArrayList<Transaccion> transacciones;
     private Integer tipoDeMoneda; // 0 dolares 1 pesos argentinos
 
-    CajaDeAhorro(){
+    CajaDeAhorro(Integer tipoDeMoneda){
         this.saldo = 0.0;
         this.numeroCuenta = numeroCuentaCounter;
         numeroCuentaCounter++;
         this.transacciones = new ArrayList<Transaccion>();
-        this.tipoDeMoneda = 0;
+        this.tipoDeMoneda = tipoDeMoneda;
     }
-    CajaDeAhorro(Integer numeroCuenta, Double saldo, Integer tipoDeMoneda){
+    CajaDeAhorro(Integer numeroCuenta, Double saldo, Integer tipoDeMoneda, ArrayList<Transaccion> transacciones){
         this.numeroCuenta = numeroCuentaCounter;
         numeroCuentaCounter++;
         this.saldo = saldo;
-        this.transacciones = new ArrayList<Transaccion>();
+        this.transacciones = transacciones;
         this.tipoDeMoneda = tipoDeMoneda;
     }
 
