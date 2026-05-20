@@ -10,13 +10,13 @@ public class Cliente {
     private CajaDeAhorro cajaDeAhorroPesos;
     private CajaDeAhorro cajaDeAhorroDolares;
 
-    public Cliente(int dni, String nombre, boolean estado) {
+    public Cliente(int dni, String nombre, boolean estado, double saldoPesos, double saldoDolares) {
         this.dni = dni;
         this.nombre = nombre;
         this.anioIngreso = LocalDate.now();
-        this.estado = true;
-        this.cajaDeAhorroDolares = new CajaDeAhorro();
-        this.cajaDeAhorroPesos = new CajaDeAhorro();
+        this.estado = estado;
+        this.cajaDeAhorroDolares = new CajaDeAhorro(saldoDolares, 0);
+        this.cajaDeAhorroPesos = new CajaDeAhorro(saldoPesos, 1);
     }
 
     public LocalDate getAnioIngreso() {
@@ -35,53 +35,23 @@ public class Cliente {
         return nombre;
     }
 
-    public double getSaldoPesos() {
-        return this.cajaDeAhorroPesos.getSaldo();
-    }
-
-    public double getSaldoDolares() {
-        return this.cajaDeAhorroDolares.getSaldo();
-    }
-
     public void setEstado(Boolean estado) {
         this.estado = estado;
     }
 
-    public void extraccionPesos(double cantidad) {
-        cajaDeAhorroPesos.extraccion(cantidad);
-        registrarTransaccion(cantidad, false, this.cajaDeAhorroPesos.getNumeroCuenta());
+    public void extraccionPesos(double monto) throws saldoInsuficienteExeption {
+        cajaDeAhorroPesos.extraccion(monto);
     }
 
-    public void extraccionDolares(double cantidad) {
-        cajaDeAhorroDolares.extraccion(cantidad);
-        registrarTransaccion(cantidad, false, this.cajaDeAhorroDolares.getNumeroCuenta());
+    public void extraccionDolares(double monto)  throws saldoInsuficienteExeption {
+        cajaDeAhorroDolares.extraccion(monto);
     }
 
-    public void depositoPesos(double cantidad) {
-        cajaDeAhorroPesos.deposito(cantidad);
-        registrarTransaccion(cantidad, true, this.cajaDeAhorroPesos.getNumeroCuenta());
+    public void depositoPesos(double monto) {
+        cajaDeAhorroPesos.deposito(monto);
     }
 
-    public void depositoDolares(double cantidad) {
-        cajaDeAhorroDolares.deposito(cantidad);
-        registrarTransaccion(cantidad, true, this.cajaDeAhorroDolares.getNumeroCuenta());
-    }
-
-    private void registrarTransaccion(double cantidad, boolean tipo, int numeroCuenta) {
-        try {
-            FileWriter writer = new FileWriter("transacciones.txt");
-            String tipoString = "";
-            if (tipo) {
-                tipoString = "extraccion";
-            } else {
-                tipoString = "deposito";
-            }
-
-            writer.append("Numero cuenta: " + numeroCuenta + ", tipo: " + tipoString + ", monto: " + cantidad);
-
-            writer.close();
-        } catch (IOException e) {
-            throw new IOException();
-        }
+    public void depositoDolares(double monto) {
+        cajaDeAhorroDolares.deposito(monto);
     }
 }
