@@ -1,5 +1,6 @@
 public class ClientePlata extends Cliente {
-    public ClienteOro(int dni, String nombre, boolean estado) {
-        super(dni, nombre, estado);
+
+    public ClientePlata(int dni, String nombre, boolean estado, double saldoPesos, double saldoDolares) {
+        super(dni, nombre, estado, saldoPesos, saldoDolares);
     }
 }
