@@ -1,4 +1,3 @@
-import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 
@@ -39,19 +38,19 @@ public class Cliente {
         this.estado = estado;
     }
 
-    public void extraccionPesos(double monto) throws SaldoInsuficienteExeption {
+    public void extraccionPesos(double monto) throws SaldoInsuficienteExeption, IOException {
         cajaDeAhorroPesos.extraccion(monto);
     }
 
-    public void extraccionDolares(double monto)  throws SaldoInsuficienteExeption {
+    public void extraccionDolares(Double monto)  throws SaldoInsuficienteExeption, IOException{
         cajaDeAhorroDolares.extraccion(monto);
     }
 
-    public void depositoPesos(double monto) {
+    public void depositoPesos(double monto) throws IOException{
         cajaDeAhorroPesos.deposito(monto);
     }
 
-    public void depositoDolares(double monto) {
+    public void depositoDolares(double monto) throws IOException{
         cajaDeAhorroDolares.deposito(monto);
     }
 }
