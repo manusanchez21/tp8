@@ -15,8 +15,8 @@ public class Cliente {
         this.nombre = nombre;
         this.anioIngreso = LocalDate.now();
         this.estado = estado;
-        this.cajaDeAhorroDolares = new CajaDeAhorro(saldoDolares, 0);
-        this.cajaDeAhorroPesos = new CajaDeAhorro(saldoPesos, 1);
+        this.cajaDeAhorroDolares = new CajaDeAhorro(0);
+        this.cajaDeAhorroPesos = new CajaDeAhorro(1);
     }
 
     public LocalDate getAnioIngreso() {
@@ -39,11 +39,11 @@ public class Cliente {
         this.estado = estado;
     }
 
-    public void extraccionPesos(double monto) throws saldoInsuficienteExeption {
+    public void extraccionPesos(double monto) throws SaldoInsuficienteExeption {
         cajaDeAhorroPesos.extraccion(monto);
     }
 
-    public void extraccionDolares(double monto)  throws saldoInsuficienteExeption {
+    public void extraccionDolares(double monto)  throws SaldoInsuficienteExeption {
         cajaDeAhorroDolares.extraccion(monto);
     }
 
