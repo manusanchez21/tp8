@@ -1,0 +1,4 @@
+10000001,Laura Martinez,10-01-2023,true,0,1,0
+10000002,Martín Gómez,16-04-2024,true,2,3,1
+10000003,Sofía Fernández,28-09-2025,false,4,5,2
+10000004,Diego Ramírez,02-12-2022,true,6,7,3

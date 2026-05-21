@@ -17,8 +17,10 @@ public class CajaDeAhorro {
         this.tipoDeMoneda = tipoDeMoneda;
     }
     CajaDeAhorro(Integer numeroCuenta, Double saldo, Integer tipoDeMoneda, ArrayList<Transaccion> transacciones){
-        this.numeroCuenta = numeroCuentaCounter;
-        numeroCuentaCounter++;
+        this.numeroCuenta = numeroCuenta;
+        if (numeroCuenta >= numeroCuentaCounter) {
+            numeroCuentaCounter = numeroCuenta + 1;
+        }
         this.saldo = saldo;
         this.transacciones = transacciones;
         this.tipoDeMoneda = tipoDeMoneda;
@@ -28,7 +30,7 @@ public class CajaDeAhorro {
         if (monto > saldo) {
             throw new SaldoInsuficienteExeption("El monto pedido por la extraccion es mayor al saldo de la caja de ahorro, no se realiza ningun cambio");
         }else{
-            Transaccion t = new Transaccion(0, monto);
+            Transaccion t = new Transaccion(tipoDeMoneda, 0, monto);
             transacciones.add(t);
             saldo -= monto;
             guardarTransaccion(t);
@@ -36,7 +38,7 @@ public class CajaDeAhorro {
     }
     
     public void deposito(Double monto) throws IOException{
-        Transaccion t = new Transaccion(1, monto);
+        Transaccion t = new Transaccion(tipoDeMoneda, 1, monto);
         transacciones.add(t);
         saldo += monto;
         guardarTransaccion(t);
@@ -53,6 +55,19 @@ public class CajaDeAhorro {
     public Integer getNumeroCuenta() {
         return numeroCuenta;
     }
+
+    public Double getSaldo() {
+        return saldo;
+    }
+
+    public ArrayList<Transaccion> getTransacciones() {
+        return transacciones;
+    }
+
+    public Integer getTipoDeMoneda() {
+        return tipoDeMoneda;
+    }
+
     public static void setNumeroCuentaCounter(int numeroCuentaCounter) {
         CajaDeAhorro.numeroCuentaCounter = numeroCuentaCounter;
     }

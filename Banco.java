@@ -1,8 +1,11 @@
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.management.InstanceAlreadyExistsException;
 
@@ -87,6 +90,75 @@ public class Banco {
         }
     }
 
+    public void agregarCliente(Cliente cliente) throws InstanceAlreadyExistsException {
+        if (clientes.containsKey(cliente.getDni())) {
+            throw new InstanceAlreadyExistsException("Esa persona ya tiene una cuenta");
+        }
+        clientes.put(cliente.getDni(), cliente);
+    }
+
+    public Cliente getCliente(Integer dni) {
+        return clientes.get(dni);
+    }
+
+    public ArrayList<Cliente> getClientes() {
+        return new ArrayList<Cliente>(clientes.values());
+    }
+
+    public boolean tieneCliente(Integer dni) {
+        return clientes.containsKey(dni);
+    }
+
+    public List<Transaccion> listarTransaccionesCliente(Integer dni) {
+        Cliente cliente = clientes.get(dni);
+        if (cliente == null) {
+            return new ArrayList<>();
+        }
+        return obtenerTodasLasTransaccionesDeCliente(cliente);
+    }
+
+    public Map<Cliente, List<Transaccion>> getTransaccionesPorMes(int mes, int anio) {
+        return getTransaccionesFiltradas(mes, anio);
+    }
+
+    public Map<Cliente, List<Transaccion>> getTransaccionesPorAnio(int anio) {
+        return getTransaccionesFiltradas(-1, anio);
+    }
+
+    public Map<Cliente, List<Transaccion>> getTransaccionesTodas() {
+        return getTransaccionesFiltradas(-1, -1);
+    }
+
+    private Map<Cliente, List<Transaccion>> getTransaccionesFiltradas(int mes, int anio) {
+        Map<Cliente, List<Transaccion>> resultado = new HashMap<>();
+        for (Cliente cliente : clientes.values()) {
+            List<Transaccion> transacciones = obtenerTodasLasTransaccionesDeCliente(cliente);
+            List<Transaccion> filtradas = new ArrayList<>();
+            for (Transaccion t : transacciones) {
+                int transMes = t.getFecha().getMonthValue();
+                int transAnio = t.getFecha().getYear();
+                if ((anio < 0 || transAnio == anio) && (mes < 0 || transMes == mes)) {
+                    filtradas.add(t);
+                }
+            }
+            if (!filtradas.isEmpty() || (mes < 0 && anio < 0 && !transacciones.isEmpty())) {
+                if (mes < 0 && anio < 0) {
+                    resultado.put(cliente, transacciones);
+                } else {
+                    resultado.put(cliente, filtradas);
+                }
+            }
+        }
+        return resultado;
+    }
+
+    private List<Transaccion> obtenerTodasLasTransaccionesDeCliente(Cliente cliente) {
+        List<Transaccion> todas = new ArrayList<>();
+        todas.addAll(cliente.getTransaccionesPesos());
+        todas.addAll(cliente.getTransaccionesDolares());
+        return todas;
+    }
+
     private void guardarClientes() throws IOException {
         try (FileWriter writer = new FileWriter("clientes.txt");) {// esto es try-with-resources, hace que writer.close
                                                                    // se ejecute siempre
@@ -112,8 +184,7 @@ public class Banco {
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(",");
                 if (Integer.parseInt(datos[0], 10) == numeroCuentaDolares) {
-                    Transaccion transaccion = new Transaccion(datos[2], Integer.parseInt(datos[3], 10),
-                            Double.parseDouble(datos[4]));
+                    Transaccion transaccion = new Transaccion(datos[2], Integer.parseInt(datos[1]), Integer.parseInt(datos[3], 10), Double.parseDouble(datos[4]));
                     transacciones.agregarTransaccionDolares(transaccion);
                     if (Integer.parseInt(datos[3], 10) == 0) {
                         saldoDolares -= Double.parseDouble(datos[4]);
@@ -121,8 +192,7 @@ public class Banco {
                         saldoDolares += Double.parseDouble(datos[4]);
                     }
                 } else if (Integer.parseInt(datos[0], 10) == numeroCuentaPesos) {
-                    Transaccion transaccion = new Transaccion(datos[2], Integer.parseInt(datos[3], 10),
-                            Double.parseDouble(datos[4]));
+                    Transaccion transaccion = new Transaccion(datos[2], Integer.parseInt(datos[1]), Integer.parseInt(datos[3], 10), Double.parseDouble(datos[4]));
                     transacciones.agregarTransaccionPesos(transaccion);
                     if (Integer.parseInt(datos[3], 10) == 0) {
                         saldoPesos -= Double.parseDouble(datos[4]);

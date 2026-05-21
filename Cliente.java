@@ -58,6 +58,38 @@ public class Cliente {
         return this.cajaDeAhorroPesos.getNumeroCuenta();
     }
 
+    public Integer getDni() {
+        return dni;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public Boolean getEstado() {
+        return estado;
+    }
+
+    public LocalDate getAnioIngreso() {
+        return anioIngreso;
+    }
+
+    public ArrayList<Transaccion> getTransaccionesDolares() {
+        return cajaDeAhorroDolares.getTransacciones();
+    }
+
+    public ArrayList<Transaccion> getTransaccionesPesos() {
+        return cajaDeAhorroPesos.getTransacciones();
+    }
+
+    public Double getSaldoDolares() {
+        return cajaDeAhorroDolares.getSaldo();
+    }
+
+    public Double getSaldoPesos() {
+        return cajaDeAhorroPesos.getSaldo();
+    }
+
     public String toString(){
         return dni + "," + nombre + "," + anioIngreso.format(formatter) + "," + estado + "," + cajaDeAhorroDolares.getNumeroCuenta() + "," + cajaDeAhorroPesos.getNumeroCuenta();
     }
