@@ -42,15 +42,15 @@ public class Cliente {
         cajaDeAhorroPesos.extraccion(monto);
     }
 
-    public void extraccionDolares(Double monto)  throws SaldoInsuficienteExeption, IOException{
+    public void extraccionDolares(Double monto) throws SaldoInsuficienteExeption, IOException {
         cajaDeAhorroDolares.extraccion(monto);
     }
 
-    public void depositoPesos(double monto) throws IOException{
+    public void depositoPesos(double monto) throws IOException {
         cajaDeAhorroPesos.deposito(monto);
     }
 
-    public void depositoDolares(double monto) throws IOException{
+    public void depositoDolares(double monto) throws IOException {
         cajaDeAhorroDolares.deposito(monto);
     }
 }
