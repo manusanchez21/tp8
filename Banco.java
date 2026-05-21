@@ -20,7 +20,7 @@ public class Banco {
 
         // Aca se tiene que leer clientes.txt y transacciones.txt y hacer la logica para llamar a las funciones clientesPlata(), ClientesOro(), ClientesPlatino(), tambien se va a tener que llamar a Transaccion(), para ir creando cada array de transacciones(como se llama a Transaccion() y no a deposito() o extraccion() no se van a escribir de vuelta), y se va usar setNumeroDeCuentaCounter para setearlo al mayor numero
 
-        
+
     }
 
     public void darDeBajaCliente(Integer dni) throws ClienteNoEncontradoException{
@@ -82,7 +82,7 @@ public class Banco {
     private void guardarClientes() throws IOException{
         try (FileWriter writer = new FileWriter("clientes.txt");){// esto es try-with-resources, hace que writer.close se ejecute siempre
             for (Cliente cliente : clientes.values()) {
-                writer.append(cliente.toString() + "\n");
+                writer.append(cliente.toString()+ "," + cliente.getCodigoNivel() + "\n"); // 0 si es cliente, 1 cliente plata, 2 cliente oro, 3 cliente platino
             }
         } catch (IOException e) {
             throw new IOException("Error al guardar clientes al finalizar el programa", e);

@@ -10,4 +10,9 @@ public class ClienteOro extends Cliente {
     public double getLimiteTarjeta() {
         return credix.getLimite();
     }
+    
+    @Override
+    public String getCodigoNivel(){
+        return "2"; 
+    }
 }

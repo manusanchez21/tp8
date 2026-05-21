@@ -54,6 +54,10 @@ public class Cliente {
         return dni + "," + nombre + "," + anioIngreso.format(formatter) + "," + estado + "," + cajaDeAhorroDolares.getNumeroCuenta() + "," + cajaDeAhorroPesos.getNumeroCuenta();
     }
 
+    public String getCodigoNivel(){
+        return "0";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true; 

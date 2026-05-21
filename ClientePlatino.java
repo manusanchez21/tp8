@@ -10,4 +10,9 @@ public class ClientePlatino extends Cliente {
     public double getLimiteTarjeta() {
         return premium.getLimite();
     }
+    
+    @Override
+    public String getCodigoNivel(){
+        return "3"; 
+    }
 }
