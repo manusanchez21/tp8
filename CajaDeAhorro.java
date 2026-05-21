@@ -34,6 +34,7 @@ public class CajaDeAhorro {
             guardarTransaccion(t);
         }
     }
+    
     public void deposito(Double monto) throws IOException{
         Transaccion t = new Transaccion(1, monto);
         transacciones.add(t);
