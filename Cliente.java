@@ -50,6 +50,14 @@ public class Cliente {
         cajaDeAhorroDolares.deposito(monto);
     }
 
+    public int getNumeroCajaDeAhorroDolares() {
+        return this.cajaDeAhorroDolares.getNumeroCuenta();
+    }
+
+    public int getNumeroCajaDeAhorroPesos() {
+        return this.cajaDeAhorroPesos.getNumeroCuenta();
+    }
+
     public String toString(){
         return dni + "," + nombre + "," + anioIngreso.format(formatter) + "," + estado + "," + cajaDeAhorroDolares.getNumeroCuenta() + "," + cajaDeAhorroPesos.getNumeroCuenta();
     }

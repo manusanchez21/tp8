@@ -28,14 +28,14 @@ public class CajaDeAhorro {
         if (monto > saldo) {
             throw new SaldoInsuficienteExeption("El monto pedido por la extraccion es mayor al saldo de la caja de ahorro, no se realiza ningun cambio");
         }else{
-            Transaccion t = new Transaccion(false, monto);
+            Transaccion t = new Transaccion(0, monto);
             transacciones.add(t);
             saldo -= monto;
             guardarTransaccion(t);
         }
     }
     public void deposito(Double monto) throws IOException{
-        Transaccion t = new Transaccion(true, monto);
+        Transaccion t = new Transaccion(1, monto);
         transacciones.add(t);
         saldo += monto;
         guardarTransaccion(t);

@@ -1,91 +1,188 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 import javax.management.InstanceAlreadyExistsException;
 
 public class Banco {
-    private HashMap<Integer,Cliente> clientes;
+    private HashMap<Integer, Cliente> clientes;
 
-    public Banco(){
-        clientes = new HashMap<Integer,Cliente>();
+    public Banco() {
+        clientes = new HashMap<Integer, Cliente>();
+     
+        try {
+            cargarClientesExistentes();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> { // esto se va a ejecutar solo cuando el programa termine
-            try{
+            try {
                 guardarClientes();
-            } catch(IOException e){
+            } catch (IOException e) {
                 System.err.println(e.getMessage());
             }
         }));
 
-        // Aca se tiene que leer clientes.txt y transacciones.txt y hacer la logica para llamar a las funciones clientesPlata(), ClientesOro(), ClientesPlatino(), tambien se va a tener que llamar a Transaccion(), para ir creando cada array de transacciones(como se llama a Transaccion() y no a deposito() o extraccion() no se van a escribir de vuelta), y se va usar setNumeroDeCuentaCounter para setearlo al mayor numero
-
-
     }
 
-    public void darDeBajaCliente(Integer dni) throws ClienteNoEncontradoException{
+    public void darDeBajaCliente(Integer dni) throws ClienteNoEncontradoException {
         if (clientes.containsKey(dni)) {
             clientes.get(dni).setEstado(false);
-        }else{
+        } else {
             throw new ClienteNoEncontradoException("El cliente a dar de baja no fue encontrado");
         }
     }
 
-    public void darDeAltaClienteExistente(Integer dni) throws ClienteNoEncontradoException{
+    public void darDeAltaClienteExistente(Integer dni) throws ClienteNoEncontradoException {
         if (clientes.containsKey(dni)) {
             clientes.get(dni).setEstado(true);
-        }else{
+        } else {
             throw new ClienteNoEncontradoException("El cliente a dar de alta no fue encontrado");
         }
     }
 
-    public void depositoDolares(Integer dni, Double monto) throws ClienteNoEncontradoException, IOException{
+    public void depositoDolares(Integer dni, Double monto) throws ClienteNoEncontradoException, IOException {
         if (clientes.containsKey(dni)) {
-            clientes.get(dni).depositoDolares(monto);;
-        }else{
+            clientes.get(dni).depositoDolares(monto);
+            ;
+        } else {
             throw new ClienteNoEncontradoException("El cliente a dar de baja no fue encontrado");
         }
     }
 
-    public void depositoPesos(Integer dni, Double monto) throws ClienteNoEncontradoException, IOException{
+    public void depositoPesos(Integer dni, Double monto) throws ClienteNoEncontradoException, IOException {
         if (clientes.containsKey(dni)) {
             clientes.get(dni).depositoPesos(monto);
-        }else{
+        } else {
             throw new ClienteNoEncontradoException("El cliente a dar de baja no fue encontrado");
         }
     }
 
-    public void extraccionDolares(Integer dni, Double monto) throws ClienteNoEncontradoException, IOException, SaldoInsuficienteExeption{
+    public void extraccionDolares(Integer dni, Double monto)
+            throws ClienteNoEncontradoException, IOException, SaldoInsuficienteExeption {
         if (clientes.containsKey(dni)) {
             clientes.get(dni).extraccionDolares(monto);
-        }else{
+        } else {
             throw new ClienteNoEncontradoException("El cliente a dar de baja no fue encontrado");
         }
     }
 
-    public void extraccionPesos(Integer dni, Double monto) throws ClienteNoEncontradoException, IOException, SaldoInsuficienteExeption{
+    public void extraccionPesos(Integer dni, Double monto)
+            throws ClienteNoEncontradoException, IOException, SaldoInsuficienteExeption {
         if (clientes.containsKey(dni)) {
             clientes.get(dni).extraccionPesos(monto);
-        }else{
+        } else {
             throw new ClienteNoEncontradoException("El cliente a dar de baja no fue encontrado");
         }
     }
-    
-    public void agregarClientePlata(ClientePlata c, Integer dni) throws InstanceAlreadyExistsException{
+
+    public void agregarClientePlata(ClientePlata c, Integer dni) throws InstanceAlreadyExistsException {
         if (clientes.containsKey(dni)) {
             throw new InstanceAlreadyExistsException("Esa persona ya tiene una cuenta");
-        }else{
+        } else {
             clientes.put(dni, c);
         }
     }
 
-    private void guardarClientes() throws IOException{
-        try (FileWriter writer = new FileWriter("clientes.txt");){// esto es try-with-resources, hace que writer.close se ejecute siempre
+    private void guardarClientes() throws IOException {
+        try (FileWriter writer = new FileWriter("clientes.txt");) {// esto es try-with-resources, hace que writer.close
+                                                                   // se ejecute siempre
             for (Cliente cliente : clientes.values()) {
-                writer.append(cliente.toString()+ "," + cliente.getCodigoNivel() + "\n"); // 0 si es cliente, 1 cliente plata, 2 cliente oro, 3 cliente platino
+                writer.append(cliente.toString() + "," + cliente.getCodigoNivel() + "\n"); // 0 si es cliente, 1 cliente
+                                                                                           // plata, 2 cliente oro, 3
+                                                                                           // cliente platino
             }
         } catch (IOException e) {
             throw new IOException("Error al guardar clientes al finalizar el programa", e);
+        }
+    }
+
+    private ArrayListTransacciones crearArraysTransacciones(int numeroCuentaDolares, int numeroCuentaPesos)
+            throws IOException {
+        ArrayListTransacciones transacciones = new ArrayListTransacciones();
+
+        try (BufferedReader br = new BufferedReader(new FileReader("transacciones.txt"))) {
+            String linea;
+
+            double saldoDolares = 0;
+            double saldoPesos = 0;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                if (Integer.parseInt(datos[0], 10) == numeroCuentaDolares) {
+                    Transaccion transaccion = new Transaccion(datos[2], Integer.parseInt(datos[3], 10),
+                            Double.parseDouble(datos[4]));
+                    transacciones.agregarTransaccionDolares(transaccion);
+                    if (Integer.parseInt(datos[3], 10) == 0) {
+                        saldoDolares -= Double.parseDouble(datos[4]);
+                    } else {
+                        saldoDolares += Double.parseDouble(datos[4]);
+                    }
+                } else if (Integer.parseInt(datos[0], 10) == numeroCuentaPesos) {
+                    Transaccion transaccion = new Transaccion(datos[2], Integer.parseInt(datos[3], 10),
+                            Double.parseDouble(datos[4]));
+                    transacciones.agregarTransaccionPesos(transaccion);
+                    if (Integer.parseInt(datos[3], 10) == 0) {
+                        saldoPesos -= Double.parseDouble(datos[4]);
+                    } else {
+                        saldoPesos += Double.parseDouble(datos[4]);
+                    }
+                }
+            }
+            transacciones.setSaldoDolares(saldoDolares);
+            transacciones.setSaldoPesos(saldoPesos);
+        }
+
+        return transacciones;
+    }
+
+    private void cargarClientesExistentes() throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader("clientes.txt"))) {
+            String linea;
+
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                ArrayListTransacciones transacciones = crearArraysTransacciones(Integer.parseInt(datos[4]),
+                        Integer.parseInt(datos[5]));
+                Boolean estado;
+                if (datos[3].equals("false")) {
+                    estado = false;
+                } else {
+                    estado = true;
+                }
+                Cliente cliente = null;
+                switch (Integer.parseInt(datos[6], 10)) {
+                    case 0:
+                        cliente = new Cliente(Integer.parseInt(datos[0], 10), datos[1], estado, datos[2],
+                                transacciones.getSaldoPesos(), transacciones.getSaldoDolares(),
+                                Integer.parseInt(datos[4]), Integer.parseInt(datos[5], 10),
+                                transacciones.getTransaccionesDolares(), transacciones.getTransaccionesPesos());
+                        break;
+                    case 1:
+                        cliente = new ClientePlata(Integer.parseInt(datos[0], 10), datos[1], estado, datos[2],
+                                transacciones.getSaldoPesos(), transacciones.getSaldoDolares(),
+                                Integer.parseInt(datos[4]), Integer.parseInt(datos[5], 10),
+                                transacciones.getTransaccionesDolares(), transacciones.getTransaccionesPesos());
+                        break;
+                    case 2:
+                        cliente = new ClienteOro(Integer.parseInt(datos[0], 10), datos[1], estado, datos[2],
+                                transacciones.getSaldoPesos(), transacciones.getSaldoDolares(),
+                                Integer.parseInt(datos[4]), Integer.parseInt(datos[5], 10),
+                                transacciones.getTransaccionesDolares(), transacciones.getTransaccionesPesos());
+                        break;
+                        case 3:
+                        cliente = new ClientePlatino(Integer.parseInt(datos[0], 10), datos[1], estado, datos[2],
+                                transacciones.getSaldoPesos(), transacciones.getSaldoDolares(),
+                                Integer.parseInt(datos[4]), Integer.parseInt(datos[5], 10),
+                                transacciones.getTransaccionesDolares(), transacciones.getTransaccionesPesos());
+                        break;
+                    default:
+                        break;
+                }
+                this.clientes.put(Integer.parseInt(datos[0], 10), cliente);
+            }
         }
     }
 }
