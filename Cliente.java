@@ -1,5 +1,8 @@
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class Cliente {
     private Integer dni;
@@ -8,30 +11,23 @@ public class Cliente {
     private Boolean estado;
     private CajaDeAhorro cajaDeAhorroPesos;
     private CajaDeAhorro cajaDeAhorroDolares;
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    public Cliente(int dni, String nombre, boolean estado, double saldoPesos, double saldoDolares) {
+    public Cliente(Integer dni, String nombre) { //constructor para un nuevo cliente
         this.dni = dni;
         this.nombre = nombre;
         this.anioIngreso = LocalDate.now();
-        this.estado = estado;
+        this.estado = true;
         this.cajaDeAhorroDolares = new CajaDeAhorro(0);
         this.cajaDeAhorroPesos = new CajaDeAhorro(1);
     }
-
-    public LocalDate getAnioIngreso() {
-        return anioIngreso;
-    }
-
-    public Integer getDni() {
-        return dni;
-    }
-
-    public Boolean getEstado() {
-        return estado;
-    }
-
-    public String getNombre() {
-        return nombre;
+    public Cliente(Integer dni, String nombre, Boolean estado, String anioIngreso, Double saldoPesos, Double saldoDolares, Integer numeroDeCuentaDolares, Integer numeroDeCuentaPesos, ArrayList<Transaccion> transaccionesDolares, ArrayList<Transaccion> transaccionesPesos) { // constructor para un cliente que es leido del archivo
+        this.dni = dni;
+        this.nombre = nombre;
+        this.anioIngreso = LocalDate.parse(anioIngreso, formatter);
+        this.estado = estado;
+        this.cajaDeAhorroDolares = new CajaDeAhorro(numeroDeCuentaDolares, saldoDolares, 0, transaccionesDolares);
+        this.cajaDeAhorroPesos = new CajaDeAhorro(numeroDeCuentaPesos, saldoPesos, 1, transaccionesPesos);
     }
 
     public void setEstado(Boolean estado) {
@@ -52,5 +48,24 @@ public class Cliente {
 
     public void depositoDolares(double monto) throws IOException{
         cajaDeAhorroDolares.deposito(monto);
+    }
+
+    public String toString(){
+        return dni + "," + nombre + "," + anioIngreso.format(formatter) + "," + estado + "," + cajaDeAhorroDolares.getNumeroCuenta() + "," + cajaDeAhorroPesos.getNumeroCuenta();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true; 
+        
+        if (o == null || getClass() != o.getClass()) return false;
+        
+        Cliente cliente = (Cliente) o;
+        return Objects.equals(this.dni, cliente.dni);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.dni);
     }
 }

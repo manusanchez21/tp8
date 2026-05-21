@@ -31,26 +31,28 @@ public class CajaDeAhorro {
             Transaccion t = new Transaccion(false, monto);
             transacciones.add(t);
             saldo -= monto;
-            try {
-                FileWriter writer = new FileWriter("transacciones.txt");
-                writer.append(numeroCuenta + "," + tipoDeMoneda + "," + t.toString());
-                
-                writer.close();
-            } catch (IOException e) {
-                throw new IOException();
-            }
+            guardarTransaccion(t);
         }
     }
-    public void deposito(Double monto)throws IOException{
+    public void deposito(Double monto) throws IOException{
         Transaccion t = new Transaccion(true, monto);
         transacciones.add(t);
         saldo += monto;
-        try {
-            FileWriter writer = new FileWriter("transacciones.txt");
-            writer.append(numeroCuenta + "," + tipoDeMoneda + "," + t.toString());
-            writer.close();
+        guardarTransaccion(t);
+    }
+
+    private void guardarTransaccion(Transaccion t) throws IOException{
+        try (FileWriter writer = new FileWriter("transacciones.txt", true);){ // esto es try-with-resources, hace que writer.close se ejecute siempre
+            writer.append(numeroCuenta + "," + tipoDeMoneda + "," + t.toString() + "\n");
         } catch (IOException e) {
-            throw new IOException();
+            throw new IOException("Error al guardar el deposito en el archivo", e);
         }
+    }
+
+    public Integer getNumeroCuenta() {
+        return numeroCuenta;
+    }
+    public static void setNumeroCuentaCounter(int numeroCuentaCounter) {
+        CajaDeAhorro.numeroCuentaCounter = numeroCuentaCounter;
     }
 }
