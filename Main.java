@@ -4,7 +4,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Aplicación de consola para interactuar con `Banco`.
+ * Provee un menú para listar clientes, ver transacciones y realizar
+ * operaciones.
+ */
 public class Main {
+    /**
+     * Punto de entrada de la aplicación.
+     * 
+     */
     public static void main(String[] args) {
         Banco banco = new Banco();
         Scanner scanner = new Scanner(System.in);

@@ -9,9 +9,17 @@ import java.util.Map;
 
 import javax.management.InstanceAlreadyExistsException;
 
+/**
+ * Clase que representa al banco y contiene la colección de clientes.
+ * Proporciona operaciones para alta/baja de clientes, depósitos y extracciones,
+ * y métodos para generar informes de transacciones.
+ */
 public class Banco {
     private HashMap<Integer, Cliente> clientes;
 
+    /**
+     * Inicializa el banco y carga los clientes existentes desde el archivo.
+     */
     public Banco() {
         clientes = new HashMap<Integer, Cliente>();
      
@@ -31,6 +39,12 @@ public class Banco {
 
     }
 
+    /**
+     * Marca un cliente como inactivo.
+     * 
+     * @param dni DNI del cliente
+     * @throws ClienteNoEncontradoException si no existe el cliente
+     */
     public void darDeBajaCliente(Integer dni) throws ClienteNoEncontradoException {
         if (clientes.containsKey(dni)) {
             clientes.get(dni).setEstado(false);
@@ -39,6 +53,12 @@ public class Banco {
         }
     }
 
+    /**
+     * Reactiva un cliente existente.
+     * 
+     * @param dni DNI del cliente
+     * @throws ClienteNoEncontradoException si no existe el cliente
+     */
     public void darDeAltaClienteExistente(Integer dni) throws ClienteNoEncontradoException {
         if (clientes.containsKey(dni)) {
             clientes.get(dni).setEstado(true);
@@ -47,6 +67,15 @@ public class Banco {
         }
     }
 
+    /**
+     * Deposita en la cuenta en dólares de un cliente.
+     * 
+     * @param dni   DNI del cliente
+     * @param monto monto a depositar
+     * @throws ClienteNoEncontradoException si no existe el cliente
+     * @throws IOException                  si ocurre un error al persistir la
+     *                                      transacción
+     */
     public void depositoDolares(Integer dni, Double monto) throws ClienteNoEncontradoException, IOException {
         if (clientes.containsKey(dni)) {
             clientes.get(dni).depositoDolares(monto);
@@ -56,6 +85,15 @@ public class Banco {
         }
     }
 
+    /**
+     * Deposita en la cuenta en pesos de un cliente.
+     * 
+     * @param dni   DNI del cliente
+     * @param monto monto a depositar
+     * @throws ClienteNoEncontradoException si no existe el cliente
+     * @throws IOException                  si ocurre un error al persistir la
+     *                                      transacción
+     */
     public void depositoPesos(Integer dni, Double monto) throws ClienteNoEncontradoException, IOException {
         if (clientes.containsKey(dni)) {
             clientes.get(dni).depositoPesos(monto);
@@ -64,6 +102,16 @@ public class Banco {
         }
     }
 
+    /**
+     * Realiza una extracción en dólares para un cliente.
+     * 
+     * @param dni   DNI del cliente
+     * @param monto monto a extraer
+     * @throws ClienteNoEncontradoException si no existe el cliente
+     * @throws IOException                  si ocurre un error al persistir la
+     *                                      transacción
+     * @throws SaldoInsuficienteExeption    si no hay saldo suficiente
+     */
     public void extraccionDolares(Integer dni, Double monto)
             throws ClienteNoEncontradoException, IOException, SaldoInsuficienteExeption {
         if (clientes.containsKey(dni)) {
@@ -73,6 +121,16 @@ public class Banco {
         }
     }
 
+    /**
+     * Realiza una extracción en pesos para un cliente.
+     * 
+     * @param dni   DNI del cliente
+     * @param monto monto a extraer
+     * @throws ClienteNoEncontradoException si no existe el cliente
+     * @throws IOException                  si ocurre un error al persistir la
+     *                                      transacción
+     * @throws SaldoInsuficienteExeption    si no hay saldo suficiente
+     */
     public void extraccionPesos(Integer dni, Double monto)
             throws ClienteNoEncontradoException, IOException, SaldoInsuficienteExeption {
         if (clientes.containsKey(dni)) {
@@ -82,6 +140,13 @@ public class Banco {
         }
     }
 
+    /**
+     * Agrega un cliente de tipo Plata al banco.
+     * 
+     * @param c   cliente Plata
+     * @param dni DNI del cliente
+     * @throws InstanceAlreadyExistsException si ya existe un cliente con ese DNI
+     */
     public void agregarClientePlata(ClientePlata c, Integer dni) throws InstanceAlreadyExistsException {
         if (clientes.containsKey(dni)) {
             throw new InstanceAlreadyExistsException("Esa persona ya tiene una cuenta");
@@ -90,6 +155,12 @@ public class Banco {
         }
     }
 
+    /**
+     * Agrega un cliente al banco.
+     * 
+     * @param cliente instancia de Cliente o subclase
+     * @throws InstanceAlreadyExistsException si ya existe un cliente con ese DNI
+     */
     public void agregarCliente(Cliente cliente) throws InstanceAlreadyExistsException {
         if (clientes.containsKey(cliente.getDni())) {
             throw new InstanceAlreadyExistsException("Esa persona ya tiene una cuenta");
@@ -97,18 +168,39 @@ public class Banco {
         clientes.put(cliente.getDni(), cliente);
     }
 
+    /**
+     * Obtiene un cliente por DNI.
+     * 
+     * @param dni DNI del cliente
+     * @return cliente o null si no existe
+     */
     public Cliente getCliente(Integer dni) {
         return clientes.get(dni);
     }
 
+    /**
+     * @return lista con todos los clientes del banco
+     */
     public ArrayList<Cliente> getClientes() {
         return new ArrayList<Cliente>(clientes.values());
     }
 
+    /**
+     * Devuelve si existe un cliente con el DNI dado.
+     * 
+     * @param dni DNI a verificar
+     * @return true si existe
+     */
     public boolean tieneCliente(Integer dni) {
         return clientes.containsKey(dni);
     }
 
+    /**
+     * Lista todas las transacciones de un cliente (pesos y dólares).
+     * 
+     * @param dni DNI del cliente
+     * @return lista de transacciones; lista vacía si no existe el cliente
+     */
     public List<Transaccion> listarTransaccionesCliente(Integer dni) {
         Cliente cliente = clientes.get(dni);
         if (cliente == null) {
@@ -117,14 +209,23 @@ public class Banco {
         return obtenerTodasLasTransaccionesDeCliente(cliente);
     }
 
+    /**
+     * Obtiene un mapa de cliente -> transacciones filtradas por mes/año.
+     */
     public Map<Cliente, List<Transaccion>> getTransaccionesPorMes(int mes, int anio) {
         return getTransaccionesFiltradas(mes, anio);
     }
 
+    /**
+     * Obtiene transacciones por año.
+     */
     public Map<Cliente, List<Transaccion>> getTransaccionesPorAnio(int anio) {
         return getTransaccionesFiltradas(-1, anio);
     }
 
+    /**
+     * Obtiene todas las transacciones de todos los clientes.
+     */
     public Map<Cliente, List<Transaccion>> getTransaccionesTodas() {
         return getTransaccionesFiltradas(-1, -1);
     }

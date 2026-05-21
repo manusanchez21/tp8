@@ -1,6 +1,10 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Representa una transacción bancaria (depósito o extracción) en una cuenta.
+ * Contiene la fecha, el tipo de moneda, tipo de transacción y el monto.
+ */
 public class Transaccion {
     private LocalDateTime fecha;
     private int tipoDeMoneda; // 0 dolares 1 pesos
@@ -8,6 +12,12 @@ public class Transaccion {
     private Double monto;
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
+    /**
+     * Crea una transacción con fecha actual.
+     * @param tipoDeMoneda 0=dólares, 1=pesos
+     * @param tipoDeTransaccion 0=extracción, 1=depósito
+     * @param monto importe de la operación
+     */
     Transaccion(int tipoDeMoneda, int tipoDeTransaccion, Double monto){
         this.fecha = LocalDateTime.now();
         this.tipoDeMoneda = tipoDeMoneda;
@@ -15,6 +25,13 @@ public class Transaccion {
         this.monto = monto;
     }
     
+    /**
+     * Crea una transacción a partir de una cadena de fecha (usado al leer archivos).
+     * @param fecha fecha en formato "dd-MM-yyyy HH:mm"
+     * @param tipoDeMoneda 0=dólares, 1=pesos
+     * @param tipoDeTransaccion 0=extracción, 1=depósito
+     * @param monto importe de la operación
+     */
     Transaccion(String fecha, int tipoDeMoneda, int tipoDeTransaccion, Double monto){
         this.fecha = LocalDateTime.parse(fecha, formatter);
         this.tipoDeMoneda = tipoDeMoneda;
@@ -46,6 +63,9 @@ public class Transaccion {
         return tipoDeTransaccion == 0 ? "Extracción" : "Depósito";
     }
 
+    /**
+     * Formato de texto usado al persistir transacciones.
+     */
     public String toString(){
         return fecha.format(formatter) + "," + tipoDeTransaccion + "," + monto;
     }
