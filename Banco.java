@@ -18,7 +18,9 @@ public class Banco {
             }
         }));
 
-        // Aca se tiene que leer clientes.txt y transacciones.txt y hacer la logica para llamar a las funciones clientesPlata(), ClientesOro(), ClientesPlatino(), tambien se va a tener que llamar a Transaccion(), para ir creando cada array de transacciones y se va usar setNumeroDeCuentaCounter para setearlo al mayor numero
+        // Aca se tiene que leer clientes.txt y transacciones.txt y hacer la logica para llamar a las funciones clientesPlata(), ClientesOro(), ClientesPlatino(), tambien se va a tener que llamar a Transaccion(), para ir creando cada array de transacciones(como se llama a Transaccion() y no a deposito() o extraccion() no se van a escribir de vuelta), y se va usar setNumeroDeCuentaCounter para setearlo al mayor numero
+
+        
     }
 
     public void darDeBajaCliente(Integer dni) throws ClienteNoEncontradoException{
