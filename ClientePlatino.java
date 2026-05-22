@@ -2,6 +2,10 @@ import java.util.ArrayList;
 
 /**
  * Cliente de nivel Platino con tarjeta premium asociada.
+ *
+ * @author Jano Chiambretto
+ * @author Manuel Sanchez Fossa
+ * @version 1.0.0
  */
 public class ClientePlatino extends Cliente {
     private TarjetaDeCredito premium;

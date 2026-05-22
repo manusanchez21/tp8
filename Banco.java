@@ -13,6 +13,10 @@ import javax.management.InstanceAlreadyExistsException;
  * Clase que representa al banco y contiene la colección de clientes.
  * Proporciona operaciones para alta/baja de clientes, depósitos y extracciones,
  * y métodos para generar informes de transacciones.
+ *
+ * @author Jano Chiambretto
+ * @author Manuel Sanchez Fossa
+ * @version 1.0.0
  */
 public class Banco {
     private HashMap<Integer, Cliente> clientes;

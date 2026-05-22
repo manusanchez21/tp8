@@ -2,6 +2,10 @@ import java.util.ArrayList;
 
 /**
  * Contenedor auxiliar que agrupa transacciones por moneda y mantiene saldos.
+ *
+ * @author Jano Chiambretto
+ * @author Manuel Sanchez Fossa
+ * @version 1.0.0
  */
 public class ArrayListTransacciones {
     private ArrayList<Transaccion> transaccionesPesos = new ArrayList<>();

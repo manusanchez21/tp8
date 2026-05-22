@@ -1,5 +1,9 @@
 /**
  * Excepción lanzada cuando no se encuentra un cliente solicitado.
+ *
+ * @author Jano Chiambretto
+ * @author Manuel Sanchez Fossa
+ * @version 1.0.0
  */
 public class ClienteNoEncontradoException extends Exception {
     /**

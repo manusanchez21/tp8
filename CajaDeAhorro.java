@@ -6,6 +6,10 @@ import java.util.ArrayList;
  * Representa una cuenta de ahorro simple que registra transacciones y saldo.
  * Puede ser de tipo dólares (0) o pesos (1) y persiste transacciones en
  * el archivo `transacciones.txt`.
+ *
+ * @author Jano Chiambretto
+ * @author Manuel Sanchez Fossa
+ * @version 1.0.0
  */
 public class CajaDeAhorro {
     private static int numeroCuentaCounter = 0; // aca hay un error de la primera vexz q leemos el archivo

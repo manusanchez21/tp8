@@ -1,5 +1,9 @@
 /**
  * Excepción lanzada cuando una extracción supera el saldo disponible.
+ *
+ * @author Jano Chiambretto
+ * @author Manuel Sanchez Fossa
+ * @version 1.0.0
  */
 public class SaldoInsuficienteExeption extends Exception {
     /**

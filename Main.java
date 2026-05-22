@@ -8,6 +8,10 @@ import java.util.Scanner;
  * Aplicación de consola para interactuar con `Banco`.
  * Provee un menú para listar clientes, ver transacciones y realizar
  * operaciones.
+ *
+ * @author Jano Chiambretto
+ * @author Manuel Sanchez Fossa
+ * @version 1.0.0
  */
 public class Main {
     /**

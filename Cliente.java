@@ -7,6 +7,10 @@ import java.util.Objects;
 /**
  * Representa un cliente del banco con dos cuentas de ahorro (pesos y dólares).
  * Incluye información básica como DNI, nombre, fecha de ingreso y estado.
+ *
+ * @author Jano Chiambretto
+ * @author Manuel Sanchez Fossa
+ * @version 1.0.0
  */
 public class Cliente {
     private Integer dni;

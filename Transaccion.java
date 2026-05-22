@@ -4,6 +4,10 @@ import java.time.format.DateTimeFormatter;
 /**
  * Representa una transacción bancaria (depósito o extracción) en una cuenta.
  * Contiene la fecha, el tipo de moneda, tipo de transacción y el monto.
+ *
+ * @author Jano Chiambretto
+ * @author Manuel Sanchez Fossa
+ * @version 1.0.0
  */
 public class Transaccion {
     private LocalDateTime fecha;

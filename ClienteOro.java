@@ -2,6 +2,10 @@ import java.util.ArrayList;
 
 /**
  * Cliente de nivel Oro con tarjeta de crédito asociada.
+ *
+ * @author Jano Chiambretto
+ * @author Manuel Sanchez Fossa
+ * @version 1.0.0
  */
 public class ClienteOro extends Cliente {
     private TarjetaDeCredito credix;

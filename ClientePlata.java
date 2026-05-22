@@ -3,6 +3,10 @@ import java.util.ArrayList;
 /**
  * Cliente de nivel Plata. Extiende `Cliente` y proporciona el código de nivel
  * correspondiente.
+ *
+ * @author Jano Chiambretto
+ * @author Manuel Sanchez Fossa
+ * @version 1.0.0
  */
 public class ClientePlata extends Cliente {
 

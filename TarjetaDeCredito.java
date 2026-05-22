@@ -1,5 +1,9 @@
 /**
  * Representa una tarjeta de crédito con un límite asociado.
+ *
+ * @author Jano Chiambretto
+ * @author Manuel Sanchez Fossa
+ * @version 1.0.0
  */
 public class TarjetaDeCredito {
     private Double limite;
